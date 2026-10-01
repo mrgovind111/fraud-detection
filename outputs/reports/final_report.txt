@@ -1,0 +1,86 @@
+================================================================================
+FRAUD DETECTION - FINAL PERFORMANCE REPORT
+================================================================================
+
+1. EXECUTIVE SUMMARY
+--------------------------------------------------------------------------------
+We built an unsupervised anomaly detection system for FinTech
+transaction fraud. Tested Isolation Forest and Local Outlier
+Factor (LOF). LOF significantly outperformed IF.
+
+RECOMMENDED: LOF (n_neighbors=20) at contamination=0.002
+  Precision: 0.4534
+  Recall:    0.7230
+  F1:        0.5573
+
+2. DATASET
+--------------------------------------------------------------------------------
+Total transactions:  284,807
+Fraud transactions:  492 (0.1727%)
+Features:            V1-V28 (PCA) + Amount_scaled + Time_scaled
+Train/Test split:    70/30 stratified
+
+3. METHODOLOGY
+--------------------------------------------------------------------------------
+Preprocessing:
+  - RobustScaler on Amount and Time (handles outliers)
+  - V1-V28 already PCA-transformed (untouched)
+
+Models:
+  - Isolation Forest (tree-based, global anomalies)
+  - Local Outlier Factor (density-based, local anomalies)
+
+Training strategy:
+  - IF: full training set
+  - LOF: 20,000 subsample of normal transactions
+
+4. RESULTS COMPARISON
+--------------------------------------------------------------------------------
+Model                       Precision    Recall        F1     AvgPrec
+--------------------------------------------------------------------------------
+Isolation Forest               0.2642    0.2838    0.2736      0.2018
+LOF (n_neighbors=20)           0.4534    0.7230    0.5573      0.5841
+--------------------------------------------------------------------------------
+
+5. OPTIMAL THRESHOLD
+--------------------------------------------------------------------------------
+Threshold (max F1): 3.123789
+  Precision: 0.6763
+  Recall:    0.6351
+  F1:        0.6551
+
+6. BUSINESS OPERATING POINTS
+--------------------------------------------------------------------------------
+Scenario                               Prec  Recall      F1   Flagged    TP    FP
+--------------------------------------------------------------------------------
+Conservative (high precision)         0.802   0.466    0.59        86    69    17
+Balanced (optimal F1)                 0.676   0.635   0.655       139    94    45
+Aggressive (high recall)              0.029   0.851   0.057      4273   126  4147
+Maximum recall                        0.015   0.865   0.029      8545   128  8417
+--------------------------------------------------------------------------------
+
+7. RECOMMENDATION
+--------------------------------------------------------------------------------
+Deploy LOF (n_neighbors=20) with threshold tuned to business
+priority. Recommended operating points:
+
+  - For high-risk segments (auto-block):
+    Conservative threshold -> high precision, fewer false alarms
+
+  - For standard flow (manual review queue):
+    Balanced threshold (max F1) -> best precision/recall trade-off
+
+  - For fraud-averse segments (flag & verify):
+    Aggressive threshold -> catch most fraud, accept more FPs
+
+8. LIMITATIONS & NEXT STEPS
+--------------------------------------------------------------------------------
+- Concept drift: fraud patterns change; retrain weekly
+- Feature engineering: add velocity, geo, device features
+- Ensemble: combine IF + LOF scores
+- Deep learning: autoencoders for richer anomaly detection
+- Human-in-the-loop: analyst feedback loop for continuous learning
+
+================================================================================
+END OF REPORT
+================================================================================

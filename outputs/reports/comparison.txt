@@ -1,0 +1,28 @@
+FRAUD DETECTION — MODEL COMPARISON
+============================================================
+
+Dataset: 284,807 transactions, 492 fraud (0.17%)
+Train: 199364, Test: 85443
+
+RESULTS
+------------------------------------------------------------
+Isolation Forest
+  Precision: 0.2642
+  Recall:    0.2838
+  F1:        0.2736
+  Avg Prec:  0.2018
+  Fit time:  3.62s
+
+LOF (n=20)
+  Precision: 0.4534
+  Recall:    0.723
+  F1:        0.5573
+  Avg Prec:  0.5841
+  Fit time:  3.93s
+
+RECOMMENDATION
+------------------------------------------------------------
+Best model by F1: LOF (n=20)
+  Precision = 0.4534
+  Recall    = 0.723
+  F1        = 0.5573
